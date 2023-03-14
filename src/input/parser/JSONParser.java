@@ -114,7 +114,7 @@ public class JSONParser
 	}
 	
 
-	public SegmentNodeDatabase parseSegmentNodeDatabase(PointNodeDatabase points, 
+	private SegmentNodeDatabase parseSegmentNodeDatabase(PointNodeDatabase points, 
 			JSONArray segmentsAsJSONArray, SegmentNodeDatabase sNodeDatabase) {
 		//parses each object in Segments; gets one adjacency list
 		for(int i = 0; i < segmentsAsJSONArray.length(); i++ ) {
@@ -146,24 +146,5 @@ public class JSONParser
 		//converts JSON data to a PointNode
 		return _builder.buildPointNode(point.getString("name"), point.getDouble("x"), point.getDouble("y"));
 	}
-	
-	/**
-	 * takes a JSONObject and returns a list of points that the key is connected to
-	 * @param nodes -- JSONObject containing a list of points as its value
-	 * @param points -- PointNodeDatabase containing possible points contained in nodes
-	 * @param key -- String is the key of nodes
-	 * @return List<PointNode> -- returns a list of points that a given key is connected to
-	 */
-	private List<PointNode> connectedNodes(JSONObject nodes, PointNodeDatabase points, String key)
-	{
-		List<PointNode> allNodes = new ArrayList<PointNode>();
-		
-		JSONArray connectedNodes = nodes.getJSONArray(key);
-		
-		//converts JSONArray 
-		for(int i = 0; i < connectedNodes.length(); i++)
-			allNodes.add(points.getPoint(connectedNodes.getString(i)));
-		
-		return allNodes;
-	}
+
 }
