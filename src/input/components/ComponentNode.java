@@ -1,5 +1,6 @@
 package input.components;
 
-public class ComponentNode {
-
+public interface ComponentNode
+{
+	void unparse(StringBuilder sb, int level);
 }
