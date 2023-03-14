@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import input.builder.DefaultBuilder;
 import input.components.*;
 import input.components.point.PointNode;
 import input.components.point.PointNodeDatabase;
@@ -28,10 +29,14 @@ import input.exception.ParseException;
 public class JSONParser
 {
 	protected ComponentNode  _astRoot;
+	protected DefaultBuilder _builder;
+	
 
-	public JSONParser()
+	public JSONParser(DefaultBuilder builder)
 	{
 		_astRoot = null;
+		_builder = builder;
+		
 	}
 
 	/**
@@ -85,16 +90,16 @@ public class JSONParser
 	*/
 	private PointNodeDatabase convertToPoints(JSONArray pointsAsJSONArray)
 	{
-		PointNodeDatabase points = new PointNodeDatabase();
+		ArrayList<PointNode> points = new ArrayList<PointNode>();
 		
 		// Populates a PointNodeDatabase with points taken from the given JSONArray
 		for(Object point : pointsAsJSONArray)
-			points.put(convertToPoint((JSONObject)point));
+			points.add(convertToPoint((JSONObject)point));
 		
-		return points;
+		return _builder.buildPointDatabaseNode(points);
 	}
 	
-	/**
+	/**		
 	 * Take in a JSONArray representing segments and return a SegmentNodeDatabase containing those points.
 	 * @param points -- PointNodeDatabase contains points used to construct segments
 	 * @param segmentsAsJSONArray -- the segments contained in the JSON file
@@ -123,7 +128,7 @@ public class JSONParser
 	private PointNode convertToPoint(JSONObject point) 
 	{
 		//converts JSON data to a PointNode
-		return new PointNode(point.getString("name"), point.getDouble("x"), point.getDouble("y"));
+		return _builder.buildPointNode(point.getString("name"), point.getDouble("x"), point.getDouble("y"));
 	}
 	
 	/**
