@@ -104,20 +104,36 @@ public class JSONParser
 	 * @param points -- PointNodeDatabase contains points used to construct segments
 	 * @param segmentsAsJSONArray -- the segments contained in the JSON file
 	 * @return segmentNodeDatabase -- the given segments are converted into a SegmentNodeDatabase
+	
 	*/
 	private SegmentNodeDatabase convertToSegments(PointNodeDatabase points, JSONArray segmentsAsJSONArray)
 	{
-		SegmentNodeDatabase segments = new SegmentNodeDatabase();
-		for(int i = 0; i < segmentsAsJSONArray.length(); i++)
-		{
-			//gets the key from each object in the array
-			String keyName = segmentsAsJSONArray.getJSONObject(i).keys().next();
-			
-			//adds segments going out from the key
-			segments.addAdjacencyList(points.getPoint(keyName), connectedNodes(segmentsAsJSONArray.getJSONObject(i), points, keyName));
+		//using builder to create new Segment Node Database
+		SegmentNodeDatabase sNodeDatabase = _builder.buildSegmentNodeDatabase();
+		return parseSegmentNodeDatabase(points, segmentsAsJSONArray, sNodeDatabase);
+	}
+	
+
+	public SegmentNodeDatabase parseSegmentNodeDatabase(PointNodeDatabase points, 
+			JSONArray segmentsAsJSONArray, SegmentNodeDatabase sNodeDatabase) {
+		//parses each object in Segments; gets one adjacency list
+		for(int i = 0; i < segmentsAsJSONArray.length(); i++ ) {
+			//gets  {"origin" : [destinationList] }, ...
+			JSONObject adjList = segmentsAsJSONArray.optJSONObject(i);
+			String origin = adjList.keys().next();
+			JSONArray destList = adjList.getJSONArray(origin);
+			//iterate to get each point name in [destinationList]
+			for (int j = 0; j < destList.length(); j++) {
+				String pointName = destList.getString(j);
+				PointNode originPoint = points.getPoint(origin);
+				PointNode point = points.getPoint(pointName);
+
+				//adds segment to database via builder
+				_builder.addSegmentToDatabase(sNodeDatabase, originPoint, point);
+
+			}		
 		}
-		
-		return segments;
+		return sNodeDatabase;
 	}
 
 	/**
