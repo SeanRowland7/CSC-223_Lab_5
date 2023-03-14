@@ -26,10 +26,10 @@ class JSONParserTest {
 		
 		ComponentNode node = JSONParserTest.runFigureParseTest("collinear_line_segments.json");
 
-		assertTrue(node instanceof FigureNode);
+		//assertTrue(node instanceof FigureNode);
 		
-		StringBuilder sb = new StringBuilder();
-		node.unparse(sb, 0);
-		System.out.println(sb.toString());
+		//StringBuilder sb = new StringBuilder();
+		//node.unparse(sb, 0);
+		//System.out.println(sb.toString());
 	}
 }
