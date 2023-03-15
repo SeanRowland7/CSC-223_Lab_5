@@ -39,7 +39,7 @@ public class DefaultBuilder
         return null;
     }
     
-    public PointNodeDatabase buildPointDatabaseNode(List<PointNode> points)
+    public PointNodeDatabase buildPointNodeDatabase(List<PointNode> points)
     {
         return null;
     }

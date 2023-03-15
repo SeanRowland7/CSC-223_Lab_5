@@ -34,7 +34,7 @@ public class GeometryBuilder extends DefaultBuilder{
 		 return new SegmentNode(pt1, pt2);
 	 }
 
-	 public PointNodeDatabase buildPointDatabaseNode(List<PointNode> points)
+	 public PointNodeDatabase buildPointNodeDatabase(List<PointNode> points)
 	 {
 		 return new PointNodeDatabase(points);
 	 }

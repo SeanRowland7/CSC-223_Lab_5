@@ -25,6 +25,8 @@ class JSONParserTest {
 	{
 		
 		ComponentNode node = JSONParserTest.runFigureParseTest("collinear_line_segments.json");
+		
+		assertTrue(node == null);
 
 		//assertTrue(node instanceof FigureNode);
 		

@@ -71,8 +71,13 @@ public class JSONParser
 			JSONObject figure = JSONroot.getJSONObject("Figure");
 			
 			description = figure.getString("Description");
-			points = convertToPoints(figure.getJSONArray("Points"));
-			segments = convertToSegments(points, figure.getJSONArray("Segments"));
+			
+			List<PointNode> pointsList = convertJSONToPointsList(figure.getJSONArray("Points"));
+			
+			points = _builder.buildPointNodeDatabase(pointsList);
+			
+			segments = _builder.buildSegmentNodeDatabase();
+			addSegmentsToDatabase(segments, pointsList, figure.getJSONArray("Segments"));
 		}
 		// If the file doesn't contain a necessary component then throw an exception
 		catch(JSONException e)
@@ -80,71 +85,56 @@ public class JSONParser
 			error("Does not contain necessary components");
 		}
 		
-		return new FigureNode(description, points, segments);
+		return _builder.buildFigureNode(description, points, segments);
 	}
 	
-	/**
-	 * Take in a JSONArray representing points and return a PointNodeDatabase containing those points.
-	 * @param pointsAsJSONArray -- the points contained in the JSON file
-	 * @return PointNodeDatabase -- the given points are converted into a PointNodeDatabase
-	*/
-	private PointNodeDatabase convertToPoints(JSONArray pointsAsJSONArray)
+	private List<PointNode> convertJSONToPointsList(JSONArray pointsAsJSONArray)
 	{
-		ArrayList<PointNode> points = new ArrayList<PointNode>();
+		ArrayList<PointNode> pointsList = new ArrayList<PointNode>();
 		
-		// Populates a PointNodeDatabase with points taken from the given JSONArray
+		// Populates with points taken from the given JSONArray
 		for(Object point : pointsAsJSONArray)
-			points.add(convertToPoint((JSONObject)point));
+			pointsList.add(convertJSONToPoint((JSONObject)point));
 		
-		return _builder.buildPointDatabaseNode(points);
+		return pointsList;
 	}
 	
-	/**		
-	 * Take in a JSONArray representing segments and return a SegmentNodeDatabase containing those points.
-	 * @param points -- PointNodeDatabase contains points used to construct segments
-	 * @param segmentsAsJSONArray -- the segments contained in the JSON file
-	 * @return segmentNodeDatabase -- the given segments are converted into a SegmentNodeDatabase
-	
-	*/
-	private SegmentNodeDatabase convertToSegments(PointNodeDatabase points, JSONArray segmentsAsJSONArray)
-	{
-		//using builder to create new Segment Node Database
-		SegmentNodeDatabase sNodeDatabase = _builder.buildSegmentNodeDatabase();
-		return parseSegmentNodeDatabase(points, segmentsAsJSONArray, sNodeDatabase);
-	}
-	
-
-	private SegmentNodeDatabase parseSegmentNodeDatabase(PointNodeDatabase points, 
-			JSONArray segmentsAsJSONArray, SegmentNodeDatabase sNodeDatabase) {
-		//parses each object in Segments; gets one adjacency list
-		for(int i = 0; i < segmentsAsJSONArray.length(); i++ ) {
-			//gets  {"origin" : [destinationList] }, ...
-			JSONObject adjList = segmentsAsJSONArray.optJSONObject(i);
-			String origin = adjList.keys().next();
-			JSONArray destList = adjList.getJSONArray(origin);
-			//iterate to get each point name in [destinationList]
-			for (int j = 0; j < destList.length(); j++) {
-				String pointName = destList.getString(j);
-				PointNode originPoint = points.getPoint(origin);
-				PointNode point = points.getPoint(pointName);
-
-				//adds segment to database via builder
-				_builder.addSegmentToDatabase(sNodeDatabase, originPoint, point);
-
-			}		
-		}
-		return sNodeDatabase;
-	}
-
-	/**
-	 * takes a given JSONObject and converts it into a PointNode
-	 * @param point -- JSONObject that is converted
-	 * @return PointNode -- the information from the JSONObject is converted into a PointNode
-	 */
-	private PointNode convertToPoint(JSONObject point) 
+	private PointNode convertJSONToPoint(JSONObject point) 
 	{
 		//converts JSON data to a PointNode
-		return _builder.buildPointNode(point.getString("name"), point.getDouble("x"), point.getDouble("y"));
+		return new PointNode(point.getString("name"), point.getDouble("x"), point.getDouble("y"));
 	}
-
+	
+	
+	private void addSegmentsToDatabase(SegmentNodeDatabase segments, List<PointNode> pointsList, JSONArray segmentsAsJSONArray)
+	{
+		for(int i = 0; i < segmentsAsJSONArray.length(); i++)
+		{
+			//gets the key from each object in the array
+			String p1Name = segmentsAsJSONArray.getJSONObject(i).keys().next();
+			
+			PointNode p1 = getPointFromList(p1Name, pointsList);
+			
+			for(Object p2AsJSON : segmentsAsJSONArray.getJSONObject(i).getJSONArray(p1Name))
+			{
+				PointNode p2 = getPointFromList(p2AsJSON.toString(), pointsList);
+				
+				_builder.addSegmentToDatabase(segments, p1, p2);
+			}
+		}
+	}
+	
+	private PointNode getPointFromList(String pointName, List<PointNode> list)
+	{
+		for(PointNode point : list)
+		{
+			if(point.getName().equals(pointName))
+			{
+				return point;
+			}
+		}
+		
+		error("Point not found.");
+		return null;
+	}
 }
