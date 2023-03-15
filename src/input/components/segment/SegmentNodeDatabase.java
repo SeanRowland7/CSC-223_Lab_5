@@ -11,9 +11,10 @@ import java.util.*;
 
 import input.components.ComponentNode;
 import input.components.point.PointNode;
+import input.visitor.ComponentNodeVisitor;
 import utilities.io.StringUtilities;
 
-public class SegmentNodeDatabase implements ComponentNode {
+public class SegmentNodeDatabase implements ComponentNode{
 
 
 private Map<PointNode, Set<PointNode>> _adjLists;
@@ -26,6 +27,10 @@ public SegmentNodeDatabase()
 public SegmentNodeDatabase(Map<PointNode, Set<PointNode>> adjLists)
 {
 	_adjLists = adjLists;
+}
+
+public Map<PointNode, Set<PointNode>> getAdjList(){
+	return _adjLists;
 }
 
 /**
@@ -151,30 +156,9 @@ public List<SegmentNode> asUniqueSegmentList()
 	return segmentList;
 }
 
-/**
- * converts data from a SegmentNodeDatabase into String
- * @param sb -- StringBuilder that String data is added to
- * @param level -- the level of indentation used
- */
 @Override
-public void unparse(StringBuilder sb, int level) {
-	// Sample output
-	// A : B C 
-	// B : A C 
-    // C : A B 
-	
-	//nested loop to get all point combinations
-	for(PointNode dEdge : _adjLists.keySet())
-	{
-		// adds name to the sb, wont be printed with the nested loop
-		sb.append("\n" + StringUtilities.indent(level) + dEdge.getName() + " : ");
-		
-		for(PointNode uEdge : _adjLists.get(dEdge))
-		{
-			//append each undirected edge for a given dEdge
-			sb.append(uEdge.getName() + " ");
-		}
-	}
-	
+public Object accept(ComponentNodeVisitor visitor, Object o) 
+{
+	return visitor.visitSegmentDatabaseNode(this, o);
 }
 }

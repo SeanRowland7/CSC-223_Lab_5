@@ -6,7 +6,7 @@ import utilities.math.MathUtilities;
 /**
 * A 2D Point (x, y).
 */
-public class PointNode implements Comparable, ComponentNode
+public class PointNode
 {
 protected static final String ANONYMOUS = "__UNNAMED";
 
@@ -73,15 +73,4 @@ public String toString()
 	return _name + "(" + _x + ", " + _y + ")";
 }
 
-@Override
-public int compareTo(Object o) {
-	// TODO Auto-generated method stub
-	return 0;
-}
-
-@Override
-public void unparse(StringBuilder sb, int level) {
-	// TODO Auto-generated method stub
-	
-}
 }
