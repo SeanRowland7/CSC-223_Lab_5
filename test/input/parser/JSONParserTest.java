@@ -30,13 +30,19 @@ class JSONParserTest {
 		ComponentNode node = JSONParserTest.runFigureParseTest("collinear_line_segments.json");
 		
 		assertTrue(node == null);
-
 		//assertTrue(node instanceof FigureNode);
-		StringBuilder sb = new StringBuilder();
+		
 		//create string builder, create unparse visitor object, call methods from there to unparse
+		StringBuilder sb = new StringBuilder();
+		int level = 0;
+		Object o = new Object();
 		UnparseVisitor uP = new UnparseVisitor();
 		
-		//node.unparse(sb, 0);
+		
+		
+	
+		
+		
 		//System.out.println(sb.toString());
 	}
 }

@@ -26,38 +26,39 @@ public class UnparseVisitor implements ComponentNodeVisitor
 		StringBuilder sb = pair.getKey();
 		int level = pair.getValue();
 
-		
+		//gets root of AST
 		sb.append("Figure" + "\n" + StringUtilities.indent(level) + "{");
 
 		//increment level for proper indentation when methods are called
 		level++;
 
+		//gets Description of AST and adds to sb
 		sb.append("\n" + StringUtilities.indent(level) + "Description : " + node.getDescription());
+		
+		
+		//calls to get Points of AST and adds to sb
 		sb.append("\n" + StringUtilities.indent(level) + "Points: \n" + StringUtilities.indent(level) + "{");
-
-		//method call to add points to the sb
 		node.getPointsDatabase().accept(this, pair);
+		sb.append("\n" + StringUtilities.indent(level) + "}");
 	
-
-		sb.append("\n" + StringUtilities.indent(level) + "}");
+		
+		//calls to get segments of AST and adds to sb
 		sb.append("\n" + StringUtilities.indent(level) + "Segments: \n" + StringUtilities.indent(level) + "{");
-
-		//method call to add segments to the sb
 		node.getSegments().accept(this, pair);
-
 		sb.append("\n" + StringUtilities.indent(level) + "}");
 
+		
 		//decrement level for proper indentation when methods are called
 		level--;
-
 		sb.append("\n" + StringUtilities.indent(level) + "}");
 
-		return null;
+		return o;
 	}
 
 	@Override
 	public Object visitSegmentDatabaseNode(SegmentNodeDatabase node, Object o)
 	{
+		@SuppressWarnings("unchecked")
 		AbstractMap.SimpleEntry<StringBuilder, Integer> pair = (AbstractMap.SimpleEntry<StringBuilder, Integer>)(o);
 		StringBuilder sb = pair.getKey();
 		int level = pair.getValue();
@@ -67,7 +68,7 @@ public class UnparseVisitor implements ComponentNodeVisitor
 		{
 			// adds name to the sb, wont be printed with the nested loop
 			sb.append("\n" + StringUtilities.indent(level) + dEdge.getName() + " : ");
-			
+		
 			for(PointNode uEdge : node.getAdjList().get(dEdge))
 			{
 				//append each undirected edge for a given dEdge
@@ -78,30 +79,32 @@ public class UnparseVisitor implements ComponentNodeVisitor
 		return o;
 	}
 
-	/**
-	 * This method should NOT be called since the segment database
-	 * uses the Adjacency list representation
-	 */
+	
 	@Override
 	public Object visitSegmentNode(SegmentNode node, Object o)
 	{
-		return null;
+		@SuppressWarnings("unchecked")
+		AbstractMap.SimpleEntry<StringBuilder, Integer> pair = (AbstractMap.SimpleEntry<StringBuilder, Integer>)(o);
+		StringBuilder sb = pair.getKey();
+		int level = pair.getValue();
+		
+		//adds toString to sb; not used since segment database uses the Adjacency list representation
+		sb.append("\n" + StringUtilities.indent(level) + node.toString());
+		return sb;
 	}
 
 	@Override
 	public Object visitPointNodeDatabase(PointNodeDatabase node, Object o)
 	{
+		@SuppressWarnings("unchecked")
 		AbstractMap.SimpleEntry<StringBuilder, Integer> pair = (AbstractMap.SimpleEntry<StringBuilder, Integer>)(o);
 		StringBuilder sb = pair.getKey();
-		int level = pair.getValue();
-		// Sample output: 
-		// Point(A)(0.0, 0.0)
-		// Point(B)(1.0, 1.0)
-		// Point(C)(1.0, 0.0)
 		
+		int level = pair.getValue();
 		for(PointNode point : node.getPoints())
 		{
-			sb.append("\n" + StringUtilities.indent(level) + "Point(" + point.getName() + ")(" + point.getX() + ", " + point.getY() + ")");
+			//calls VisitPointNode to get the point
+			visitPointNode(point, pair);
 		}
 
 		return o;
@@ -110,7 +113,13 @@ public class UnparseVisitor implements ComponentNodeVisitor
 	@Override
 	public Object visitPointNode(PointNode node, Object o)
 	{
-		//TODO
-		return null;
+		@SuppressWarnings("unchecked")
+		AbstractMap.SimpleEntry<StringBuilder, Integer> pair = (AbstractMap.SimpleEntry<StringBuilder, Integer>)(o);
+		StringBuilder sb = pair.getKey();
+		int level = pair.getValue();
+		
+		//adds point to sb and returns sb
+		sb.append("\n" + StringUtilities.indent(level) + "Point(" + node.getName() + ")(" + node.getX() + ", " + node.getY() + ")");
+		return sb;
 	}
 }
