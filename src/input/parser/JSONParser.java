@@ -128,13 +128,12 @@ public class JSONParser
 	{
 		for(PointNode point : list)
 		{
-			if(point.getName().equals(pointName))
+			if(point != null && point.getName().equals(pointName))
 			{
 				return point;
 			}
 		}
 		
-		error("Point not found.");
 		return null;
 	}
 }
