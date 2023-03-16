@@ -1,0 +1,54 @@
+//           A
+//          / \
+//         /   \
+//         B---C
+//         /\ /\
+//        /  D  \
+//        E /  \ F
+{ 
+  "Figure" :
+  {
+    "Description" : "Four triangles where one serves as a side for each of the others",
+    "Points" :
+	  [
+	    {
+	      "name" : "A",
+		  "x" : 3,
+   	      "y" : -1
+		},
+	    {
+	      "name" : "B",
+		  "x" : 2,
+   	      "y" : -1
+		},
+	    {
+	      "name" : "C",
+		  "x" : 4,
+   	      "y" : -2
+		},
+        {
+          "name" : "D",
+          "x" : 3,
+          "y" : -3
+        },
+        {
+          "name" : "E",
+          "x" : 1,
+          "y" : -4
+        },
+        {
+          "name" : "F",
+          "x" : 5,
+          "y" : -4
+        }
+	  ],
+  
+    "Segments" :
+      [
+	    {"A" : ["B" , "C"] },
+        {"B" : ["C", "D", "E"] },
+        {"C" : ["D", "F"] },
+        {"D" : ["E", "F"] }
+      ]
+  }
+}

@@ -1,0 +1,57 @@
+//  A ______B
+//  |\ \ / /|
+//  | \ C / |
+//  |  \ /  |
+//  |   \   |
+//  |  / \  |
+//  | / E \ |
+//  |/ / \ \| 
+//  D_______F
+{   
+  "Figure" :
+  {
+    "Description" : "Rectangle with two arrow shaped figures mirrored inside",
+    "Points" :
+	  [
+	    {
+	      "name" : "A",
+		  "x" : 2,
+   	      "y" : 8
+		},
+	    {
+	      "name" : "B",
+		  "x" : 6,
+   	      "y" : 8
+		},
+	    {
+	      "name" : "C",
+		  "x" : 4,
+   	      "y" : 7
+		},
+        {
+          "name" : "D",
+          "x" : 2,
+          "y" : 2
+        },
+        {
+          "name" : "E",
+          "x" : 4,
+          "y" : 3
+        },
+        {
+          "name" : "F",
+          "x" : 6,
+          "y" : 2
+        }
+	  ],
+  
+    "Segments" :
+      [
+	    {"A" : ["B" , "C", "D", "F"] },
+        {"B" : ["C", "D", "F"] },
+        {"C" : ["E", "F"] },
+        {"D" : ["E", "F"] },
+        {"F" : ["E"] }
+      ]
+  }
+}

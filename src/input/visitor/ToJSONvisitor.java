@@ -2,6 +2,8 @@ package input.visitor;
 
 import java.util.AbstractMap;
 
+import org.json.JSONObject;
+
 import input.components.FigureNode;
 import input.components.point.PointNode;
 import input.components.point.PointNodeDatabase;
@@ -13,7 +15,7 @@ public class ToJSONvisitor {
 
 	public Object visitFigureNode(FigureNode node, Object o)
 	{
-		// Unpack the input object containing a Stringbuilder and an indentation level
+		JSONObject jsonOb = new JSONObject();
 		@SuppressWarnings("unchecked")
 		AbstractMap.SimpleEntry<StringBuilder, Integer> pair = (AbstractMap.SimpleEntry<StringBuilder, Integer>)(o);
 		StringBuilder sb = pair.getKey();
@@ -47,6 +49,7 @@ public class ToJSONvisitor {
 
 		return o;
 	}
+
 
 	public Object visitSegmentDatabaseNode(SegmentNodeDatabase node, Object o)
 	{
