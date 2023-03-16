@@ -22,7 +22,7 @@ import input.exception.ParseException;
 *
 * <p>Bugs: None
 *
-* @author Sean Rowland, Caden Parry, Hayes Brown
+* @author Sean Rowland
 * @date 02/23/2023
 */
 
@@ -62,8 +62,8 @@ public class JSONParser
 		
 		// Initializes variables that will store data from JSON file
 		String description = "";
-		PointNodeDatabase points = new PointNodeDatabase();
-		SegmentNodeDatabase segments = new SegmentNodeDatabase();
+		PointNodeDatabase points = null;
+		SegmentNodeDatabase segments = null;
 		
 		// Stores information from the JSON file
 		try 
@@ -102,7 +102,7 @@ public class JSONParser
 	private PointNode convertJSONToPoint(JSONObject point) 
 	{
 		//converts JSON data to a PointNode
-		return new PointNode(point.getString("name"), point.getDouble("x"), point.getDouble("y"));
+		return _builder.buildPointNode(point.getString("name"), point.getDouble("x"), point.getDouble("y"));
 	}
 	
 	
@@ -128,13 +128,12 @@ public class JSONParser
 	{
 		for(PointNode point : list)
 		{
-			if(point.getName().equals(pointName))
+			if(point != null && point.getName().equals(pointName))
 			{
 				return point;
 			}
 		}
 		
-		error("Point not found.");
 		return null;
 	}
 }
