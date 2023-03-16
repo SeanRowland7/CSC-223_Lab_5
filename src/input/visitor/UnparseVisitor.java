@@ -90,7 +90,7 @@ public class UnparseVisitor implements ComponentNodeVisitor
 		
 		//adds toString to sb; not used since segment database uses the Adjacency list representation
 		sb.append("\n" + StringUtilities.indent(level) + node.toString());
-		return sb;
+		return o;
 	}
 
 	@Override
@@ -120,6 +120,6 @@ public class UnparseVisitor implements ComponentNodeVisitor
 		
 		//adds point to sb and returns sb
 		sb.append("\n" + StringUtilities.indent(level) + "Point(" + node.getName() + ")(" + node.getX() + ", " + node.getY() + ")");
-		return sb;
+		return o;
 	}
 }

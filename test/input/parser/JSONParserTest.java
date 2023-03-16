@@ -30,15 +30,12 @@ class JSONParserTest {
 		ComponentNode node = JSONParserTest.runFigureParseTest("collinear_line_segments.json");
 		
 		assertTrue(node == null);
-		//assertTrue(node instanceof FigureNode);
+		assertTrue(node instanceof FigureNode);
 		
 		//create string builder, create unparse visitor object, call methods from there to unparse
-		StringBuilder sb = new StringBuilder();
-		int level = 0;
-		Object o = new Object();
 		UnparseVisitor uP = new UnparseVisitor();
-		
-		
+		StringBuilder sb = new StringBuilder(); 
+		uP.visitFigureNode((FigureNode)node, new AbstractMap.SimpleEntry<StringBuilder, Integer>(sb, 0));
 		
 	
 		
