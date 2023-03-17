@@ -1,7 +1,5 @@
 package input.visitor;
 
-import java.util.AbstractMap;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -10,7 +8,6 @@ import input.components.point.PointNode;
 import input.components.point.PointNodeDatabase;
 import input.components.segment.SegmentNode;
 import input.components.segment.SegmentNodeDatabase;
-import utilities.io.StringUtilities;
 /**
 * This file converts AST into a JSON object
 *  by unparsing the tree
@@ -23,6 +20,9 @@ import utilities.io.StringUtilities;
 
 public class ToJSONvisitor implements ComponentNodeVisitor {
 
+	/**
+	 * Construct and return the JSON representation of the given FigureNode.
+	 */
 	public Object visitFigureNode(FigureNode node, Object o)
 	{
 	
@@ -46,7 +46,9 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 		return jsonOb;
 	}
 
-
+	/**
+	 * Construct and return the JSON representation of the given SegmentNodeDatabase.
+	 */
 	public Object visitSegmentDatabaseNode(SegmentNodeDatabase node, Object o)
 	{
 		//JSON object for adjacency list
@@ -70,6 +72,9 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 		return adjList;
 	}
 	
+	/**
+	 * Construct and return the JSON representation of the adjacency list for the SegmentNodeDatabase.
+	 */
 	public Object getDestinationList(SegmentNodeDatabase node, Object o, PointNode dEdge)
 	{
 		//makes an array of all adjacent points and loops through adjacent points to origin and adds to array
@@ -83,7 +88,9 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 		return destList;
 	}
 	
-
+	/**
+	 * Construct and return the JSON representation of the given SegmentNode.
+	 */
 	public Object visitSegmentNode(SegmentNode node, Object o)
 	{
 		//makes segment object and adds segment; not used since AdjLists gets it from getDestinationList
@@ -92,7 +99,9 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 		return segment;
 	}
 
-
+	/**
+	 * Construct and return the JSON representation of the given PointNodeDatabase.
+	 */
 	public Object visitPointNodeDatabase(PointNodeDatabase node, Object o)
 	{
 		//makes array for all points in pnd
@@ -106,7 +115,9 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 		return jsonPoints;
 	}
 
-
+	/**
+	 * Construct and return the JSON representation of the given PointNode.
+	 */
 	public Object visitPointNode(PointNode node, Object o)
 	{
 		//creates object for each point

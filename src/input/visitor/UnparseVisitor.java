@@ -21,6 +21,10 @@ import utilities.io.StringUtilities;
 
 public class UnparseVisitor implements ComponentNodeVisitor
 {
+	
+	/**
+	 * Unparse the given FigureNode and construct its representation with the given StringBuilder.
+	 */
 	@Override
 	public Object visitFigureNode(FigureNode node, Object o)
 	{
@@ -60,6 +64,10 @@ public class UnparseVisitor implements ComponentNodeVisitor
 		return o;
 	}
 
+	
+	/**
+	 * Unparse the given SegmentNodeDatabase and construct its representation with the given StringBuilder.
+	 */
 	@Override
 	public Object visitSegmentDatabaseNode(SegmentNodeDatabase node, Object o)
 	{
@@ -84,7 +92,9 @@ public class UnparseVisitor implements ComponentNodeVisitor
 		return o;
 	}
 
-	
+	/**
+	 * Unparse the given SegmentNode and construct its representation with the given StringBuilder.
+	 */
 	@Override
 	public Object visitSegmentNode(SegmentNode node, Object o)
 	{
@@ -98,6 +108,9 @@ public class UnparseVisitor implements ComponentNodeVisitor
 		return o;
 	}
 
+	/**
+	 * Unparse the given PointNodeDatabase and construct its representation with the given StringBuilder.
+	 */
 	@Override
 	public Object visitPointNodeDatabase(PointNodeDatabase node, Object o)
 	{
@@ -113,6 +126,9 @@ public class UnparseVisitor implements ComponentNodeVisitor
 		return o;
 	}
 
+	/**
+	 * Unparse the given PointNode and construct its representation with the given StringBuilder.
+	 */
 	@Override
 	public Object visitPointNode(PointNode node, Object o)
 	{

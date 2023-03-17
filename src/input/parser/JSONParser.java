@@ -90,6 +90,9 @@ public class JSONParser
 		return _builder.buildFigureNode(description, points, segments);
 	}
 	
+	/**
+	 * Convert a JSONArray representation of points into a list of points.
+	 */
 	private List<PointNode> convertJSONToPointsList(JSONArray pointsAsJSONArray)
 	{
 		ArrayList<PointNode> pointsList = new ArrayList<PointNode>();
@@ -101,13 +104,18 @@ public class JSONParser
 		return pointsList;
 	}
 	
+	/**
+	 * Convert a JSONArray representation of a point into a PointNode using the builder.
+	 */
 	private PointNode convertJSONToPoint(JSONObject point) 
 	{
 		// Use the builder to potentially convert JSON data to a PointNode
 		return _builder.buildPointNode(point.getString("name"), point.getDouble("x"), point.getDouble("y"));
 	}
 	
-	
+	/**
+	 * Convert JSONArray representation of segments to actually segments add potentially add segments to the database using the builder. 
+	 */
 	private void addSegmentsToDatabase(SegmentNodeDatabase segments, List<PointNode> pointsList, JSONArray segmentsAsJSONArray)
 	{
 		for(int i = 0; i < segmentsAsJSONArray.length(); i++)
@@ -129,6 +137,9 @@ public class JSONParser
 		}
 	}
 	
+	/**
+	 * Attempt to find a PointNode with a given name from a list potentially containing PointNodes.
+	 */
 	private PointNode getPointFromList(String pointName, List<PointNode> list)
 	{
 		for(PointNode point : list)

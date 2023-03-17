@@ -2,14 +2,10 @@ package input.builder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.AbstractMap;
-
 import org.junit.jupiter.api.Test;
 
 import input.components.ComponentNode;
-import input.components.FigureNode;
 import input.parser.JSONParser;
-import input.visitor.UnparseVisitor;
 
 class DefaultBuilderTest 
 {

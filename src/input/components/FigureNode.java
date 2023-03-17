@@ -1,12 +1,8 @@
 package input.components;
 
-import java.util.Set;
-
-import input.components.point.PointNode;
 import input.components.point.PointNodeDatabase;
 import input.components.segment.SegmentNodeDatabase;
 import input.visitor.ComponentNodeVisitor;
-import utilities.io.StringUtilities;
 
 /**
  * A basic figure consists of points, segments, and an optional description
