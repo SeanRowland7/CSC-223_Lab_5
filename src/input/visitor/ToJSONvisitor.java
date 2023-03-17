@@ -26,19 +26,17 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 	public Object visitFigureNode(FigureNode node, Object o)
 	{
 	
-		//gets Description of AST and adds to sb
 		JSONObject figure = new JSONObject();
+		//gets description
 		figure.put("Description" , node.getDescription());
 		
 		
 		//calls to get Points of AST and adds to sb
-		//JSONObject points = new JSONObject();
 		figure.put("Points", node.getPointsDatabase().accept(this, null));
-		
+	
 		
 		//calls to get segments of AST and adds to sb
-		//JSONObject segments = new JSONObject();
-		figure.append("Segments", node.getSegments().accept(this, null));
+		figure.put("Segments", node.getSegments().accept(this, null));
 		
 
 		JSONObject jsonOb = new JSONObject();
@@ -58,11 +56,18 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 		for(PointNode dEdge : node.getAdjList().keySet())
 		{
 			// adds origin point and calls destinationList which gets all of the adjacent points to origin
+			//adjList.put(dEdge.getName(), getDestinationList(node,o,dEdge));
+			for(PointNode uEdge : node.getAdjList().get(dEdge))
+			{
+				JSONArray destList = new JSONArray();
+				//append each undirected edge for a given dEdge
+				destList.put(uEdge.getName());
+			}
 			adjList.put(dEdge.getName(), getDestinationList(node,o,dEdge));
 					
 		}
 
-		return o;
+		return adjList;
 	}
 	
 	public Object getDestinationList(SegmentNodeDatabase node, Object o, PointNode dEdge)
@@ -75,7 +80,7 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 			destList.put(uEdge.getName());
 		}
 	
-		return o;
+		return destList;
 	}
 	
 
@@ -84,7 +89,7 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 		//makes segment object and adds segment; not used since AdjLists gets it from getDestinationList
 		JSONObject segment = new JSONObject();
 		segment.put(node.getPoint1().getName(), node.getPoint2().getName());
-		return o;
+		return segment;
 	}
 
 
@@ -98,7 +103,7 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 			jsonPoints.put(visitPointNode(point, visitPointNode(point,null)));
 		}
 
-		return o;
+		return jsonPoints;
 	}
 
 
@@ -111,7 +116,14 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 		point.put("y", node.getY());
 		
 
-		return o;
+		return point;
+	}
+	
+	public String toString(int i) {
+		String s = "";
+		
+		
+		return s;
 	}
 	
 }
