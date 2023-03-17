@@ -10,11 +10,17 @@ import input.components.segment.SegmentNode;
 import input.components.segment.SegmentNodeDatabase;
 import utilities.io.StringUtilities;
 
-//
-// This file implements a Visitor (design pattern) with 
-// the intent of building an unparsed, String representation
-// of a geometry figure.
-//
+/**
+* This file implements a Visitor (design pattern) with 
+* the intent of building an unparsed, String representation
+* of a geometry figure.
+*
+* <p>Bugs: None
+*
+* @author Abby Dumke, Julia Hogg, Sean Rowland
+* @date 03/17/2023
+*/
+
 public class UnparseVisitor implements ComponentNodeVisitor
 {
 	@Override

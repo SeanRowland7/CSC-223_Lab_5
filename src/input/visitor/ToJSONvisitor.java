@@ -11,6 +11,15 @@ import input.components.point.PointNodeDatabase;
 import input.components.segment.SegmentNode;
 import input.components.segment.SegmentNodeDatabase;
 import utilities.io.StringUtilities;
+/**
+* This file converts AST into a JSON object
+*  by unparsing the tree
+*
+* <p>Bugs: None
+*
+* @author Abby Dumke, Julia Hogg, Sean Rowland
+* @date 03/17/2023
+*/
 
 public class ToJSONvisitor implements ComponentNodeVisitor {
 
@@ -42,11 +51,13 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 
 	public Object visitSegmentDatabaseNode(SegmentNodeDatabase node, Object o)
 	{
+		//JSON object for adjacency list
 		JSONObject adjList = new JSONObject();
-		//nested loop to get all point combinations
+		
+		//loops through all keys in adjacency list (origin points)
 		for(PointNode dEdge : node.getAdjList().keySet())
 		{
-			// adds name to the sb, wont be printed with the nested loop
+			// adds origin point and calls destinationList which gets all of the adjacent points to origin
 			adjList.put(dEdge.getName(), getDestinationList(node,o,dEdge));
 					
 		}
@@ -56,6 +67,7 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 	
 	public Object getDestinationList(SegmentNodeDatabase node, Object o, PointNode dEdge)
 	{
+		//makes an array of all adjacent points and loops through adjacent points to origin and adds to array
 		JSONArray destList = new JSONArray();
 		for(PointNode uEdge : node.getAdjList().get(dEdge))
 		{
@@ -69,24 +81,20 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 
 	public Object visitSegmentNode(SegmentNode node, Object o)
 	{
-		
-		@SuppressWarnings("unchecked")
-		AbstractMap.SimpleEntry<StringBuilder, Integer> pair = (AbstractMap.SimpleEntry<StringBuilder, Integer>)(o);
-		StringBuilder sb = pair.getKey();
-		int level = pair.getValue();
-		
-		//adds toString to sb; not used since segment database uses the Adjacency list representation
-		sb.append("\n" + StringUtilities.indent(level) + node.toString());
+		//makes segment object and adds segment; not used since AdjLists gets it from getDestinationList
+		JSONObject segment = new JSONObject();
+		segment.put(node.getPoint1().getName(), node.getPoint2().getName());
 		return o;
 	}
 
 
 	public Object visitPointNodeDatabase(PointNodeDatabase node, Object o)
 	{
+		//makes array for all points in pnd
 		JSONArray jsonPoints = new JSONArray();
 		for(PointNode point : node.getPoints())
 		{
-			//calls VisitPointNode to get the point
+			//calls VisitPointNode to get the point and adds to array
 			jsonPoints.put(visitPointNode(point, visitPointNode(point,null)));
 		}
 
@@ -96,6 +104,7 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 
 	public Object visitPointNode(PointNode node, Object o)
 	{
+		//creates object for each point
 		JSONObject point = new JSONObject();
 		point.put("name", node.getName());
 		point.put("x", node.getX());
