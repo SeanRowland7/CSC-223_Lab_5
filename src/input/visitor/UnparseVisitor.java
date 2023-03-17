@@ -1,8 +1,6 @@
 package input.visitor;
 
 import java.util.AbstractMap;
-import java.util.Map;
-import java.util.Set;
 
 import input.components.*;
 import input.components.point.*;
@@ -44,13 +42,14 @@ public class UnparseVisitor implements ComponentNodeVisitor
 		
 		//calls to get Points of AST and adds to sb
 		sb.append("\n" + StringUtilities.indent(level) + "Points: \n" + StringUtilities.indent(level) + "{");
-		node.getPointsDatabase().accept(this, pair);
+		
+		node.getPointsDatabase().accept(this, new AbstractMap.SimpleEntry<StringBuilder, Integer>(sb, level + 1));
 		sb.append("\n" + StringUtilities.indent(level) + "}");
 	
 		
 		//calls to get segments of AST and adds to sb
 		sb.append("\n" + StringUtilities.indent(level) + "Segments: \n" + StringUtilities.indent(level) + "{");
-		node.getSegments().accept(this, pair);
+		node.getSegments().accept(this, new AbstractMap.SimpleEntry<StringBuilder, Integer>(sb, level + 1));
 		sb.append("\n" + StringUtilities.indent(level) + "}");
 
 		
@@ -104,9 +103,7 @@ public class UnparseVisitor implements ComponentNodeVisitor
 	{
 		@SuppressWarnings("unchecked")
 		AbstractMap.SimpleEntry<StringBuilder, Integer> pair = (AbstractMap.SimpleEntry<StringBuilder, Integer>)(o);
-		StringBuilder sb = pair.getKey();
-		
-		int level = pair.getValue();
+	
 		for(PointNode point : node.getPoints())
 		{
 			//calls VisitPointNode to get the point

@@ -29,11 +29,6 @@ class DefaultBuilderTest
 		ComponentNode node = DefaultBuilderTest.runFigureParseTest("collinear_line_segments.json");
 		
 		assertTrue(node == null);
-		
-		//create string builder, create unparse visitor object, call methods from there to unparse
-		//UnparseVisitor uP = new UnparseVisitor();
-		//StringBuilder sb = new StringBuilder(); 
-		//uP.visitFigureNode((FigureNode)node, new AbstractMap.SimpleEntry<StringBuilder, Integer>(sb, 0));
 	}
 	
 	

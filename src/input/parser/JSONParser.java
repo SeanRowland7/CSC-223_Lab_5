@@ -23,7 +23,7 @@ import input.exception.ParseException;
 * <p>Bugs: None
 *
 * @author Sean Rowland
-* @date 02/23/2023
+* @date 03/16/2023
 */
 
 public class JSONParser
@@ -49,8 +49,8 @@ public class JSONParser
 	}
 
 	/**
-	 * Parse a String containing a JSON representation of a geometry figures and 
-	   construct those figures using PointNodeDatabases and SegmentNodeDatabases
+	 * Parse a String containing a JSON representation of a geometry figures and
+	 * delegate potential build responsibilities to the builder.
 	 * @param str -- String is parsed into useful data
 	 * @return ComponentNode -- where the data from str is stored
 	*/
@@ -60,22 +60,24 @@ public class JSONParser
 		JSONTokener tokenizer = new JSONTokener(str);
 		JSONObject  JSONroot = (JSONObject)tokenizer.nextValue();
 		
-		// Initializes variables that will store data from JSON file
+		// Create variables that will potentially store data from JSON file
 		String description = "";
 		PointNodeDatabase points = null;
 		SegmentNodeDatabase segments = null;
 		
-		// Stores information from the JSON file
 		try 
 		{
 			JSONObject figure = JSONroot.getJSONObject("Figure");
 			
 			description = figure.getString("Description");
 			
+			// Use the builder to potentially build the points and add them to a list.
 			List<PointNode> pointsList = convertJSONToPointsList(figure.getJSONArray("Points"));
 			
+			// Assign points to be what the builder creates from the list of potential points.
 			points = _builder.buildPointNodeDatabase(pointsList);
 			
+			// Use the builder to potentially build a segment database and then potentially add segments to it.
 			segments = _builder.buildSegmentNodeDatabase();
 			addSegmentsToDatabase(segments, pointsList, figure.getJSONArray("Segments"));
 		}
@@ -101,7 +103,7 @@ public class JSONParser
 	
 	private PointNode convertJSONToPoint(JSONObject point) 
 	{
-		//converts JSON data to a PointNode
+		// Use the builder to potentially convert JSON data to a PointNode
 		return _builder.buildPointNode(point.getString("name"), point.getDouble("x"), point.getDouble("y"));
 	}
 	
@@ -113,12 +115,15 @@ public class JSONParser
 			//gets the key from each object in the array
 			String p1Name = segmentsAsJSONArray.getJSONObject(i).keys().next();
 			
+			// Get the first point using its name if it exists.
 			PointNode p1 = getPointFromList(p1Name, pointsList);
 			
 			for(Object p2AsJSON : segmentsAsJSONArray.getJSONObject(i).getJSONArray(p1Name))
 			{
+				// Get the second point using its name if it exists.
 				PointNode p2 = getPointFromList(p2AsJSON.toString(), pointsList);
 				
+				// Use the builder to potentially add the segment to the database.
 				_builder.addSegmentToDatabase(segments, p1, p2);
 			}
 		}
@@ -128,6 +133,7 @@ public class JSONParser
 	{
 		for(PointNode point : list)
 		{
+			// If the list has valid nodes than attempt to find the one with the given name.
 			if(point != null && point.getName().equals(pointName))
 			{
 				return point;
