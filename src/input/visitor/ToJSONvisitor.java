@@ -40,7 +40,7 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 		
 
 		JSONObject jsonOb = new JSONObject();
-		jsonOb.put("figure", figure);
+		jsonOb.put("Figure", figure);
 		
 
 		return jsonOb;
@@ -118,13 +118,5 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 
 		return point;
 	}
-	
-	public String toString(int i) {
-		String s = "";
-		
-		
-		return s;
-	}
-	
 }
 

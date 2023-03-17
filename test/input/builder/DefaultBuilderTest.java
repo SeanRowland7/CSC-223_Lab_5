@@ -48,8 +48,6 @@ class DefaultBuilderTest
 		ComponentNode node = DefaultBuilderTest.runFigureParseTest("bow_shape_trapezoid.json");
 
 		assertTrue(node == null);
-
-
 	}
 
 	@Test
