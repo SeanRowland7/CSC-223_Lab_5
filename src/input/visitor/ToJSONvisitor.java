@@ -58,13 +58,6 @@ public class ToJSONvisitor implements ComponentNodeVisitor {
 		for(PointNode dEdge : node.getAdjList().keySet())
 		{
 			// adds origin point and calls destinationList which gets all of the adjacent points to origin
-			//adjList.put(dEdge.getName(), getDestinationList(node,o,dEdge));
-			for(PointNode uEdge : node.getAdjList().get(dEdge))
-			{
-				JSONArray destList = new JSONArray();
-				//append each undirected edge for a given dEdge
-				destList.put(uEdge.getName());
-			}
 			adjList.put(dEdge.getName(), getDestinationList(node,o,dEdge));
 					
 		}
