@@ -2,6 +2,7 @@ package input.visitor;
 
 import java.util.AbstractMap;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import input.components.FigureNode;
@@ -11,41 +12,29 @@ import input.components.segment.SegmentNode;
 import input.components.segment.SegmentNodeDatabase;
 import utilities.io.StringUtilities;
 
-public class ToJSONvisitor {
+public class ToJSONvisitor implements ComponentNodeVisitor {
 
 	public Object visitFigureNode(FigureNode node, Object o)
 	{
-		JSONObject jsonOb = new JSONObject();
-		@SuppressWarnings("unchecked")
-		AbstractMap.SimpleEntry<StringBuilder, Integer> pair = (AbstractMap.SimpleEntry<StringBuilder, Integer>)(o);
-		StringBuilder sb = pair.getKey();
-		int level = pair.getValue();
-
-		//gets root of AST
-		sb.append("Figure" + "\n" + StringUtilities.indent(level) + "{");
-
-		//increment level for proper indentation when methods are called
-		level++;
-
+	
 		//gets Description of AST and adds to sb
-		sb.append("\n" + StringUtilities.indent(level) + "Description : " + node.getDescription());
+		JSONObject figure = new JSONObject();
+		figure.put("Description" , node.getDescription());
 		
 		
 		//calls to get Points of AST and adds to sb
-		sb.append("\n" + StringUtilities.indent(level) + "Points: \n" + StringUtilities.indent(level) + "{");
-		node.getPointsDatabase().accept(this, pair);
-		sb.append("\n" + StringUtilities.indent(level) + "}");
-	
+		//JSONObject points = new JSONObject();
+		figure.put("Points", node.getPointsDatabase().accept(this, null));
+		
 		
 		//calls to get segments of AST and adds to sb
-		sb.append("\n" + StringUtilities.indent(level) + "Segments: \n" + StringUtilities.indent(level) + "{");
-		node.getSegments().accept(this, pair);
-		sb.append("\n" + StringUtilities.indent(level) + "}");
-
+		//JSONObject segments = new JSONObject();
+		figure.append("Segments", node.getSegments().accept(this, null));
 		
-		//decrement level for proper indentation when methods are called
-		level--;
-		sb.append("\n" + StringUtilities.indent(level) + "}");
+
+		JSONObject jsonOb = new JSONObject();
+		jsonOb.put("figure", figure);
+		
 
 		return o;
 	}
@@ -53,31 +42,34 @@ public class ToJSONvisitor {
 
 	public Object visitSegmentDatabaseNode(SegmentNodeDatabase node, Object o)
 	{
-		@SuppressWarnings("unchecked")
-		AbstractMap.SimpleEntry<StringBuilder, Integer> pair = (AbstractMap.SimpleEntry<StringBuilder, Integer>)(o);
-		StringBuilder sb = pair.getKey();
-		int level = pair.getValue();
-		
+		JSONObject adjList = new JSONObject();
 		//nested loop to get all point combinations
 		for(PointNode dEdge : node.getAdjList().keySet())
 		{
 			// adds name to the sb, wont be printed with the nested loop
-			sb.append("\n" + StringUtilities.indent(level) + dEdge.getName() + " : ");
-		
-			for(PointNode uEdge : node.getAdjList().get(dEdge))
-			{
-				//append each undirected edge for a given dEdge
-				sb.append(uEdge.getName() + " ");
-			}
+			adjList.put(dEdge.getName(), getDestinationList(node,o,dEdge));
+					
 		}
 
 		return o;
 	}
-
+	
+	public Object getDestinationList(SegmentNodeDatabase node, Object o, PointNode dEdge)
+	{
+		JSONArray destList = new JSONArray();
+		for(PointNode uEdge : node.getAdjList().get(dEdge))
+		{
+			//append each undirected edge for a given dEdge
+			destList.put(uEdge.getName());
+		}
+	
+		return o;
+	}
 	
 
 	public Object visitSegmentNode(SegmentNode node, Object o)
 	{
+		
 		@SuppressWarnings("unchecked")
 		AbstractMap.SimpleEntry<StringBuilder, Integer> pair = (AbstractMap.SimpleEntry<StringBuilder, Integer>)(o);
 		StringBuilder sb = pair.getKey();
@@ -91,15 +83,11 @@ public class ToJSONvisitor {
 
 	public Object visitPointNodeDatabase(PointNodeDatabase node, Object o)
 	{
-		@SuppressWarnings("unchecked")
-		AbstractMap.SimpleEntry<StringBuilder, Integer> pair = (AbstractMap.SimpleEntry<StringBuilder, Integer>)(o);
-		StringBuilder sb = pair.getKey();
-		
-		int level = pair.getValue();
+		JSONArray jsonPoints = new JSONArray();
 		for(PointNode point : node.getPoints())
 		{
 			//calls VisitPointNode to get the point
-			visitPointNode(point, pair);
+			jsonPoints.put(visitPointNode(point, visitPointNode(point,null)));
 		}
 
 		return o;
@@ -108,14 +96,19 @@ public class ToJSONvisitor {
 
 	public Object visitPointNode(PointNode node, Object o)
 	{
-		@SuppressWarnings("unchecked")
-		AbstractMap.SimpleEntry<StringBuilder, Integer> pair = (AbstractMap.SimpleEntry<StringBuilder, Integer>)(o);
-		StringBuilder sb = pair.getKey();
-		int level = pair.getValue();
+		JSONObject point = new JSONObject();
+		point.put("name", node.getName());
+		point.put("x", node.getX());
+		point.put("y", node.getY());
 		
-		//adds point to sb and returns sb
-		sb.append("\n" + StringUtilities.indent(level) + "Point(" + node.getName() + ")(" + node.getX() + ", " + node.getY() + ")");
+
 		return o;
+	}
+	
+	//NOT DONE
+	public String toString(int i) {
+		String s = "";
+		return s;
 	}
 }
 
